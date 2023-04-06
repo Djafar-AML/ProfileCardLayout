@@ -7,6 +7,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -60,7 +61,8 @@ fun TopBar() {
     TopAppBar(
         navigationIcon = {
             Icon(
-                imageVector = Icons.Default.Home, contentDescription = "Home", Modifier.padding(
+                imageVector = Icons.Default.Home,
+                contentDescription = "Home", Modifier.padding(
                     start = 16.dp
                 )
             )
@@ -78,6 +80,7 @@ fun ProfileCard() {
             .padding(16.dp)
             .fillMaxWidth()
             .wrapContentHeight(align = Alignment.Top),
+        shape = CutCornerShape(topEnd = 24.dp),
         elevation = 8.dp,
     ) {
 
