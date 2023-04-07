@@ -98,7 +98,7 @@ fun ProfileCard(userProfile: UserProfile) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            ProfilePicture(userProfile.drawableId, userProfile.status)
+            ProfilePicture(userProfile.pictureUrl, userProfile.status)
             ProfileContent(userProfile.name, userProfile.status)
         }
 
@@ -107,7 +107,7 @@ fun ProfileCard(userProfile: UserProfile) {
 }
 
 @Composable
-fun ProfilePicture(userProfileDrawableId: Int, onlineStatus: Boolean) {
+fun ProfilePicture(userProfileUrl: String, onlineStatus: Boolean) {
 
     Card(
         shape = CircleShape,
@@ -120,7 +120,7 @@ fun ProfilePicture(userProfileDrawableId: Int, onlineStatus: Boolean) {
     ) {
 
         AsyncImage(
-            model = userProfileDrawableId,
+            model = userProfileUrl,
             contentDescription = "User Profile Picture",
             modifier = Modifier.size(72.dp),
             contentScale = ContentScale.Crop
