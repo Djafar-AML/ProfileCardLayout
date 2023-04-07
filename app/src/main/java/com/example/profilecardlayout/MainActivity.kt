@@ -12,12 +12,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -60,7 +62,7 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
             })
         ) { navBackStack ->
             val userId = navBackStack.arguments?.getInt("userId")
-            UserProfileDetailsScreen(userId)
+            UserProfileDetailsScreen(userId, navController)
         }
     }
 }
@@ -70,7 +72,7 @@ fun UsersList(userProfiles: List<UserProfile>, navController: NavHostController?
 
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(title = "Home", icon = Icons.Default.Home) {}
         }
     ) { contentPadding ->
 
@@ -98,18 +100,20 @@ fun UsersList(userProfiles: List<UserProfile>, navController: NavHostController?
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(title: String, icon: ImageVector, onIconButtonClick: () -> Unit) {
 
     TopAppBar(
         navigationIcon = {
-            Icon(
-                imageVector = Icons.Default.Home,
-                contentDescription = "Home", Modifier.padding(
-                    start = 16.dp
+            IconButton(
+                onClick = { onIconButtonClick.invoke() },
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = "Home",
                 )
-            )
+            }
         },
-        title = { Text(text = "Home") },
+        title = { Text(text = title) },
 
         )
 }
@@ -197,13 +201,15 @@ fun ProfileContent(
 }
 
 @Composable
-fun UserProfileDetailsScreen(userProfileId: Int?) {
+fun UserProfileDetailsScreen(userProfileId: Int?, navController: NavHostController?) {
 
     val userProfile = userProfileList.first { it.id == userProfileId }
 
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(title = "User Details", icon = Icons.Default.ArrowBack) {
+                navController?.navigateUp()
+            }
         }
     ) { contentPadding ->
 
@@ -250,7 +256,7 @@ fun ProfileDetailsCard(userProfile: UserProfile) {
 fun UserProfileDetailsPreview() {
 
     ProfileCardLayoutTheme {
-        UserProfileDetailsScreen(0)
+        UserProfileDetailsScreen(0, null)
     }
 
 }
