@@ -23,9 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.AsyncImage
 import com.example.profilecardlayout.ui.theme.ProfileCardLayoutTheme
 import com.example.profilecardlayout.ui.theme.lightGreen
@@ -47,12 +49,18 @@ fun UsersApplication(userProfiles: List<UserProfile> = userProfileList) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "users_list") {
-        composable("users_list") {
+        composable(route = "users_list") {
             UsersList(userProfiles, navController)
         }
 
-        composable("user_details") {
-            UserProfileDetailsScreen()
+        composable(
+            route = "user_details/{userId}",
+            arguments = listOf(navArgument("userId") {
+                type = NavType.IntType
+            })
+        ) { navBackStack ->
+            val userId = navBackStack.arguments?.getInt("userId")
+            UserProfileDetailsScreen(userId)
         }
     }
 }
@@ -77,7 +85,8 @@ fun UsersList(userProfiles: List<UserProfile>, navController: NavHostController?
                     items(userProfiles) { userProfile ->
 
                         ProfileCard(userProfile) {
-                            navController?.navigate("user_details")
+                            val userProfileId = userProfile.id
+                            navController?.navigate("user_details/${userProfileId}")
                         }
                     }
 
@@ -188,7 +197,9 @@ fun ProfileContent(
 }
 
 @Composable
-fun UserProfileDetailsScreen(userProfile: UserProfile = userProfileList[0]) {
+fun UserProfileDetailsScreen(userProfileId: Int?) {
+
+    val userProfile = userProfileList.first { it.id == userProfileId }
 
     Scaffold(
         topBar = {
@@ -239,7 +250,7 @@ fun ProfileDetailsCard(userProfile: UserProfile) {
 fun UserProfileDetailsPreview() {
 
     ProfileCardLayoutTheme {
-        UserProfileDetailsScreen()
+        UserProfileDetailsScreen(0)
     }
 
 }
